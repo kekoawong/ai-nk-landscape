@@ -1,1 +1,1 @@
-# modelpy-model-template
+# An NK Landscape Model
