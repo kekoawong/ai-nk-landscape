@@ -9,7 +9,7 @@ class NKLandscape:
     Attributes:
         N (int): Number of components in the solution string.
         K (int): Number of dependencies for each component.
-        landscape (np.ndarray): The fitness landscape as a 2D numpy array.
+        landscape (np.ndarray): The fitness landscape as a numpy array.
         fitness_dict (Dict[str, float]): A dictionary mapping solution strings to their fitness values.
     """
 
@@ -28,23 +28,24 @@ class NKLandscape:
 
     def _generate_landscape(self) -> np.ndarray:
         """
-        Generates the fitness landscape based on N and K.
+        Generates the fitness landscape based on N and K randomly with values [0, 1).
         
         Returns:
-            np.ndarray: A 2D numpy array representing the fitness landscape.
+            np.ndarray: A numpy array representing the fitness landscape. Dimensions are N * 2^(K+1)
         """
         return np.random.rand(self.N, 2 ** (self.K + 1))
 
-    def _calculate_fitness(self, solution: str) -> float:
+    def get_fitness(self, solution: str) -> float:
         """
         Calculates the fitness of a given solution string.
         
         Args:
-            solution (str): A binary string representing the solution. ex) "1010101010"
+            solution (str): A binary string representing the solution vector. ex) "1010101010"
         
         Returns:
             float: The fitness value of the solution.
         """
+        # for runtime efficiency, return solution if already calculated
         if solution in self.fitness_dict:
             return self.fitness_dict[solution]
         
@@ -64,24 +65,16 @@ class NKLandscape:
         Args:
             i (int): The index of the component in the solution string.
             solution (str): The binary solution string.
+
+        Example:
+            N = 5, K = 3, solution = "10101"
+            indices will be 101 --> index will be 5 (since base 2 int)
         
         Returns:
             int: The index corresponding to the component and its dependencies.
         """
         indices = [solution[(i + j) % self.N] for j in range(self.K + 1)]
         return int(''.join(indices), 2)
-
-    def get_fitness(self, solution: str) -> float:
-        """
-        Public method to get the fitness of a given solution.
-        
-        Args:
-            solution (str): A binary string representing the solution.
-        
-        Returns:
-            float: The fitness value of the solution.
-        """
-        return self._calculate_fitness(solution)
 
 # Example Usage
 if __name__ == "__main__":
