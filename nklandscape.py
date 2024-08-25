@@ -54,6 +54,7 @@ class NKLandscape:
             index: int = self._get_index(i, solution)
             fitness += self.landscape[i, index]
         
+        # fitness is the average of all the fitness indices
         fitness /= self.N
         self.fitness_dict[solution] = fitness
         return fitness
