@@ -10,6 +10,7 @@ num_agents = 100
 network_type = 'linear'
 p = 0.4  # Probability of edge creation, only for a random graph
 velocity = 0.5
+_error = 1 # UNIMPLEMENTED
 
 # initialize the NK Landscape and the initial agent solutions
 N = 10
