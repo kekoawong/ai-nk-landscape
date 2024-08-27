@@ -68,14 +68,24 @@ class NKLandscape:
             solution (str): The binary solution string.
 
         Example:
-            N = 5, K = 3, solution = "10101"
-            indices will be 101 --> index will be 5 (since base 2 int)
+            i=2, K = 2, solution = "10111", bit result --> 111, returns 8
+            N only used for a modulo to wrap around the solution string if necessary
         
         Returns:
             int: The index corresponding to the component and its dependencies.
         """
+        # concatenates the K+1 components starting from i, wrapping around using modulo
         indices = [solution[(i + j) % self.N] for j in range(self.K + 1)]
         return int(''.join(indices), 2)
+
+    def generate_random_solution(self) -> str:
+        """
+        Generates a random solution string.
+
+        Returns:
+            str: A binary string of length N representing a random solution.
+        """
+        return ''.join(np.random.choice(['0', '1']) for _ in range(self.N))
 
 # Example Usage
 if __name__ == "__main__":
