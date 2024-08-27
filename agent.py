@@ -19,6 +19,14 @@ class Agent:
     def update_solution(self, neighbors: List['Agent'], landscape: NKLandscape) -> str:
         """Updates the agent's solution based on the best neighbor or mutation."""
         current_fitness: float = landscape.get_fitness(self.solution)
+
+        # do not check neighbors if low velocity
+        if np.random.rand() > self.velocity:
+            original_solution: str = self.solution
+            self.mutate_solution()
+            if landscape.get_fitness(self.solution) <= current_fitness:
+                self.solution = original_solution
+            return self.solution
         
         # get the best neighbors' solutions
         best_neighbor_solution: str = self.solution
