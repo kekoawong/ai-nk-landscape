@@ -3,9 +3,10 @@ import numpy as np
 from nklandscape import NKLandscape
 
 class Agent:
-    def __init__(self, id: int, initial_solution: str):
+    def __init__(self, id: int, initial_solution: str, velocity: float = 1.0):
         self.id: int = id
         self.solution: str = initial_solution
+        self.velocity: float = velocity
     
     def mutate_solution(self) -> str:
         """Randomly flips a bit in the solution string."""
