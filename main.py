@@ -1,20 +1,37 @@
 import networkx as nx
+from nklandscape import NKLandscape
 
-# Initialize parameters
+# initialize parameters
 num_simulations = 10
 num_agents = 100
 network_type = 'linear'
 
-# Initialize network type
-network = nx.Graph()
+# initialize the NK Landscape and the initial agent solutions
+N = 10
+K = 2
+nk_landscape = NKLandscape(N, K)
+initial_solutions = [nk_landscape.generate_random_solution() for _ in range(num_agents)]
+
+# initialize network based on the specified type
 if network_type == 'linear':
-    network 
+    network = nx.path_graph(num_agents)
 elif network_type == 'total':
-    pass
+    network = nx.complete_graph(num_agents)
 elif network_type == 'random':
-    pass
+    p = 0.5  # Probability of edge creation
+    network = nx.erdos_renyi_graph(num_agents, p)
 
+# assign pre-generated solutions to each agent in the network
+for agent in range(num_agents):
+    network.nodes[agent]['solution'] = initial_solutions[agent]
 
-# Initialize model
-# all actors are randomly placed in network, and have random solutions generated
-# add a nk landscape model method that will generate a random solution
+# loop through each timestep
+# for each timestep, each agent will look at the value of their neighbor's solutions
+# if so, they change their solution completely copies the solution of that neighbor
+# if not, they will randomly change a digit in their current solution, compare solutions and pick the larger one
+
+# keep looping through until all of the population has converged to a single solution
+
+# Example: Access the solution string of a specific agent
+example_agent = 0
+print(f"Agent {example_agent} has solution: {network.nodes[example_agent]['solution']}")
