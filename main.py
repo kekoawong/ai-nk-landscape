@@ -1,4 +1,5 @@
 import networkx as nx
+from agent import Agent
 from nklandscape import NKLandscape
 
 # initialize parameters
@@ -10,7 +11,7 @@ network_type = 'linear'
 N = 10
 K = 2
 nk_landscape = NKLandscape(N, K)
-initial_solutions = [nk_landscape.generate_random_solution() for _ in range(num_agents)]
+agents = [Agent(i, nk_landscape.generate_random_solution()) for i in range(num_agents)]
 
 # initialize network based on the specified type
 if network_type == 'linear':
@@ -22,8 +23,8 @@ elif network_type == 'random':
     network = nx.erdos_renyi_graph(num_agents, p)
 
 # assign pre-generated solutions to each agent in the network
-for agent in range(num_agents):
-    network.nodes[agent]['solution'] = initial_solutions[agent]
+for i, agent in enumerate(agents):
+    network.nodes[i]['agent'] = agent
 
 # loop through each timestep
 # for each timestep, each agent will look at the value of their neighbor's solutions
