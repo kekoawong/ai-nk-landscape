@@ -1,3 +1,4 @@
+from typing import List
 import networkx as nx
 from agent import Agent
 from nklandscape import NKLandscape
@@ -19,19 +20,40 @@ if network_type == 'linear':
 elif network_type == 'total':
     network = nx.complete_graph(num_agents)
 elif network_type == 'random':
-    p = 0.5  # Probability of edge creation
+    p = 0.1  # Probability of edge creation
     network = nx.erdos_renyi_graph(num_agents, p)
 
 # assign pre-generated solutions to each agent in the network
 for i, agent in enumerate(agents):
     network.nodes[i]['agent'] = agent
 
-# loop through each timestep
-# for each timestep, each agent will look at the value of their neighbor's solutions
-# if so, they change their solution completely copies the solution of that neighbor
-# if not, they will randomly change a digit in their current solution, compare solutions and pick the larger one
+# Main simulation loop
+def simulate(network: nx.Graph) -> List[float]:
+    # Store average fitness for each timestep
+    avg_fitness_per_timestep = []
 
-# keep looping through until all of the population has converged to a single solution
+    # run until convergence
+    converged = False
+    while not converged:
+        converged = True
+        total_fitness = 0.0
+
+        # update all the agents, set convergence bool
+        for agent in agents:
+            neighbors = [network.nodes[neighbor]['agent'] for neighbor in network.neighbors(agent.id)]
+            current_solution: str = agent.solution
+            # QUESTION: Mid-round updates may give an advantage to an agent seeing the updates of other agent to make their own decisions?
+            agent.update_solution(neighbors, nk_landscape)
+            if agent.solution != current_solution:
+                converged = False
+            
+            # add agent fitness to collect metrics
+            total_fitness += nk_landscape.get_fitness(agent.solution)
+
+        # append average fitness
+        avg_fitness_per_timestep.append(total_fitness / num_agents)
+    
+    return avg_fitness_per_timestep
 
 # Example: Access the solution string of a specific agent
 example_agent = 0
