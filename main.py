@@ -7,7 +7,7 @@ from nklandscape import NKLandscape
 # initialize parameters
 num_simulations = 10
 num_agents = 100
-network_type = 'linear'
+network_type = 'random'
 p = 0.4  # Probability of edge creation, only for a random graph
 velocity = 0.5
 _error = 1 # UNIMPLEMENTED
